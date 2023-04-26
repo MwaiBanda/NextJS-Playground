@@ -2,12 +2,10 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { SignIn, SignInButton, SignOutButton, SignUp, SignUpButton, useUser } from "@clerk/nextjs";
 import { api } from "~/utils/api";
-;
-
 
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ text: "from tRPC" })
   const user = useUser()
 
   return (
@@ -23,7 +21,7 @@ const Home: NextPage = () => {
         <SignUp path="signup" routing="path" signInUrl="/singin"/>
       </main>
     </>
-  );
-};
+  )
+}
 
 export default Home;

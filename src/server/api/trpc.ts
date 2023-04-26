@@ -56,8 +56,13 @@ export const createTRPCContext = (_opts: CreateNextContextOptions) => {
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { OpenApiMeta } from "trpc-openapi";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC
+.context<typeof createTRPCContext>()
+.meta<OpenApiMeta>()
+.create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -70,6 +75,15 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     };
   },
 });
+
+type Context = {
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined>
+}
+
+export const createContext = async ({ req, res }: CreateNextContextOptions): Promise<Context> => {
+  return { prisma };
+};
+
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
